@@ -14,7 +14,13 @@ const express = require('express'),
 
 
 // Config Import
-const config = require('./config');
+try{
+	var config = require('./config');
+} catch (e) {
+	console.log("Could not import config. This probably means you're not working locally.")
+	console.log(e);
+}
+
 
 // Route Imports
 const recipeRoutes = require('./routes/recipes'),
@@ -44,7 +50,13 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Connect to DB
-mongoose.connect(config.db.connection, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+try {
+	mongoose.connect(config.db.connection, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+} catch (e) {
+	console.log("Could not connect using config. This probably means you are not working locally.");
+	mongoose.connect(process.env.DB_CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+}
+
 
 // Express Config
 app.set("view engine", "ejs");
@@ -52,7 +64,7 @@ app.use(express.static('public'));
 
 // Express Session Config
 app.use(expressSession({
-	secret: "h8ioho8hoihiohkjhjkh8879y97tegwsersfsdf434tsttetet4tete",
+	secret: process.env.ES_SECRET || config.expressSession.secret,
 	resave: false,
 	saveUninitialized: false
 }));
@@ -84,6 +96,6 @@ app.use("/recipes/:id/comments", commentRoutes);
 // =====================
 // LISTEN
 // =====================
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
 	console.log("yelp_recipes is running...")
 })
