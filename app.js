@@ -5,6 +5,7 @@
 const express = require('express'),
 	  app = express(),
 	  bodyParser = require('body-parser'),
+	  flash = require('connect-flash'),
 	  mongoose = require('mongoose'),
 	  methodOverride = require('method-override'),
 	  morgan = require('morgan'),
@@ -71,6 +72,9 @@ app.use(expressSession({
 
 // Method Override Config
 app.use(methodOverride('_method'));
+
+// Connect Flash
+app.use(flash());
 
 // Passport Config
 app.use(passport.initialize());
