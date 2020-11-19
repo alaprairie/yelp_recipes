@@ -67,6 +67,20 @@ router.get("/search", async (req, res) => {
 	}
 })
 
+// Genre
+router.get("/genre/:genre", async (req, res) => {
+	// Check if the given genre is valid
+	const validGenres = ["cajun", "slow-cooker", "goblin"];
+	if (validGenres.includes(req.params.genre.toLowerCase())) {
+		// If yes, continue
+		const recipes = await Recipe.find({genre: req.params.genre}).exec();
+		res.render("recipes", {recipes});
+	} else {
+		// If no, send an error
+		res.send("Please enter a valid genre")
+	}
+});
+
 // Show
 router.get("/:id", async (req, res) => {
 	try {
