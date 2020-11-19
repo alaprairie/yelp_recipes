@@ -10,7 +10,7 @@ router.get("/new", isLoggedIn, (req, res) =>{
 	res.render("comments_new", {recipeId: req.params.id})
 })
 
-// create comment - actually update database
+// Create comment - actually update database
 router.post("/", isLoggedIn, async (req, res) =>{
 	// Create the comment
 	try {
@@ -22,11 +22,12 @@ router.post("/", isLoggedIn, async (req, res) =>{
 		text: req.body.text,
 		recipeId: req.body.recipeId
 		})
-		console.log(comment);
+		req.flash("success", "Comment created!");
 		res.redirect(`/recipes/${req.body.recipeId}`)
 	} catch (err) {
 		console.log(err);
-		res.send("Broken again... POST comments")
+		req.flash("error", "Error creating comment");
+		res.redirect("/recipes");
 	}
 })
 
@@ -35,12 +36,10 @@ router.get("/:commentId/edit", checkCommentOwner, async (req, res) => {
 	try {
 		const recipe = await Recipe.findById(req.params.id).exec();
 		const comment = await Comment.findById(req.params.commentId).exec();
-		console.log("recipe:", recipe)
-		console.log("comment:", comment)
 		res.render("comments_edit", {recipe, comment});
 	} catch (err) {
 		console.log(err);
-		res.send("Broke Comment Edit GET");
+		res.redirect("/recipes");
 	}
 })
 
@@ -48,11 +47,12 @@ router.get("/:commentId/edit", checkCommentOwner, async (req, res) => {
 router.put("/:commentId", checkCommentOwner, async (req, res) => {
 	try {
 		const comment = await Comment.findByIdAndUpdate(req.params.commentId, {text: req.body.text}, {new: true})
-		console.log(comment);
+		req.flash("success", "Comment edited!")
 		res.redirect(`/recipes/${req.params.id}`);
 	} catch (err) {
 		console.log(err);
-		res.send("broken comment PUT")
+		req.flash("error", "Error editing comment");
+		res.redirect("/recipes");
 }
 })
 
@@ -60,11 +60,12 @@ router.put("/:commentId", checkCommentOwner, async (req, res) => {
 router.delete("/:commentId", checkCommentOwner, async (req, res) => {
 	try {
 		const comment = await Comment.findByIdAndDelete(req.params.commentId);
-		console.log(comment);
+		req.flash("success", "Comment deleted!");
 		res.redirect(`/recipes/${req.params.id}`);
 	} catch (err) {
 		console.log(err);
-		res.send("Broken again comment DELETE");
+		req.flash("error", "Error deleting comment");
+		res.redirect("/recipes");
 	}
 })
 

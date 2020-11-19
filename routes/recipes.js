@@ -39,11 +39,11 @@ router.post("/", isLoggedIn, async (req, res) => {
 	
 	try {
 		const recipe = await Recipe.create(newRecipe);
-		console.log(recipe)
+		req.flash("success", "Recipe Created!");
 		res.redirect("/recipes/" + recipe._id);
 	} catch (err) {
-		console.log(err);
-		res.send("You broke it... /recipes POST");
+		req.flash("error", "Error creating recipe");
+		res.redirect("/recipes");
 	}
 })
 
@@ -117,10 +117,12 @@ router.put("/:id", checkRecipeOwner, async (req, res) => {
 	
 	try {
 	const recipe = Recipe.findByIdAndUpdate(req.params.id, recipeBody, {new: true}).exec();
+	req.flash("success", "Recipe updated!")
 	res.redirect(`/recipes/${req.params.id}`);
-	} catch(err) {
+	} catch (err) {
 		console.log(err);
-		res.send("it's broken jim /recipes/id PUT");
+		req.flash("error", "error updating recipe")
+		res.redirect("/recipes");
 	}
 })
 
@@ -128,11 +130,12 @@ router.put("/:id", checkRecipeOwner, async (req, res) => {
 router.delete("/:id", checkRecipeOwner, async (req, res) => {
 	try {
 		const deletedRecipe = Recipe.findByIdAndDelete(req.params.id).exec();
-		console.log("Deleted:", deletedRecipe);
+		req.flash("success", "Recipe deleted!");
 		res.redirect("/recipes");
 	} catch(err) {
 		console.log(err);
-		res.send("borked /comics/id DELETE");
+		req.flash("error", "Error deleting recipe")
+		res.redirect("back");
 	}
 })
 
