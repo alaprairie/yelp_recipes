@@ -27,7 +27,17 @@
 	line-height: 1.4;
 }
 
-/* show comics */
+/* show recipes */
 .show_image-container img {
 	width: 80%;
+}
+
+#enterButton {
+    min-height: 10em;
+    display: table-cell;
+    vertical-align: middle
+}
+
+body {
+	background-color: FFC225;
 }
