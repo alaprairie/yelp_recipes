@@ -4,7 +4,7 @@ const recipeSchema = new mongoose.Schema({
 	title: String,
 	description: String,
 	author: String,
-	publisher: String,
+	ingredients: String,
 	date: Date,
 	series: String,
 	issue: Number,
@@ -17,7 +17,9 @@ const recipeSchema = new mongoose.Schema({
 			ref: "User"
 		},
 		username: String
-	}
+	},
+	upvotes: [String],
+	downvotes: [String]
 });
 
 recipeSchema.index({

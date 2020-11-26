@@ -24,7 +24,7 @@ router.post("/", isLoggedIn, async (req, res) => {
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
-		publisher: req.body.publisher,
+		ingredients: req.body.ingredients,
 		date: req.body.date,
 		series: req.body.series,
 		issue: req.body.issue,
@@ -34,7 +34,9 @@ router.post("/", isLoggedIn, async (req, res) => {
 		owner: {
 			id: req.user._id,
 			username: req.user.username
-		}
+		},
+		upvotes: [req.user.username],
+		downvotes: []
 	}
 	
 	try {
@@ -106,7 +108,7 @@ router.put("/:id", checkRecipeOwner, async (req, res) => {
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
-		publisher: req.body.publisher,
+		ingredients: req.body.ingredients,
 		date: req.body.date,
 		series: req.body.series,
 		issue: req.body.issue,
@@ -138,7 +140,6 @@ router.delete("/:id", checkRecipeOwner, async (req, res) => {
 		res.redirect("back");
 	}
 })
-
 
 
 module.exports = router;
