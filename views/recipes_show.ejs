@@ -1,5 +1,26 @@
 <%- include ("partials/header") %>
 
+<% const convertUnits = (ingredients, num) => { 
+	 const measurements = ["tbsp", "tablespoon", "tablespoons", "tsp", "teaspoon", "teaspoon", "oz", "ounce", "ounces", "pound", "pounds", "floz", "cup", "cups", "pint", "pints", "quart", "quarts", "gal", "gallon", "gallons", "lb", "lbs"]
+
+	 const words = ingredients.split(" ") 
+		 words.forEach((word, i) =>{
+			 if(measurements.includes(word.toLowerCase())) {
+				 words[i - 1] = parseFloat(words[i - 1]) * num 
+			 }
+			 const output = words.join(" ")
+		}
+	)
+	// documnent not defined
+	// const txt = document.getElementById('ingredients')
+	// txt.innerText = output
+} %>
+
+
+
+
+
+
 <div class="container">
 	<div class="row mt-4">
 		<div class="col-6 show_image-container">
@@ -15,8 +36,8 @@
 				  <td><%= recipe.author %></td>
 				</tr>
 				<tr>
-				  <th scope="row">Publisher</th>
-				  <td><%= recipe.publisher %></td>
+				  <th scope="row">Ingredients</th>
+				  <td id="ingredients"><%= recipe.ingredients %></td>
 				</tr>
 				<tr>
 				  <th scope="row">Date</th>
@@ -38,6 +59,15 @@
 				  <th scope="row">Color?</th>
 				  <td><%= recipe.color %></td>
 				</tr>
+				<tr>
+				  <th scope="row">Portion?</th>
+					<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 2) %>">Convert units x2
+					  </a></td>
+					<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 3) %>">Convert units x3
+					  </a></td>
+			  		<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 5) %>">Convert units x5
+					  </a></td>
+				</tr>
 			  </tbody>
 			</table>
 			<% if (user && user.username === recipe.owner.username) { %>
@@ -50,10 +80,17 @@
 			<% } %>
 		</div>
 	</div>
-	<div class="row show_comment-header mt-3">
-		COMMENT HEADER
+	<div class="row">
+		<a href="/recipes/<%= recipe._id %>/comments/new" class="col-3">
+			<button class="btn-success btn-lg mt-3 mb-4">Add Comment</button>
+		</a>
+		<div>
+			<button id="upvote_btn" class="btn btn-outline-success btn-lg -mt-3">+</button>
+			<span id="score" class="mx-2">10</span>
+			<button id="downvote_btn" class="btn btn-outline-danger btn-lg -mt-3">-</button>
+		</div>
 	</div>
-	<a href="/recipes/<%= recipe._id %>/comments/new"><button class="btn-success btn-lg mt-3 mb-4">Add Comment</button></a>
+	
 	<% comments.forEach((comment) => { %>
 		<div class="row show_comment-container py-2 border">
 			<div class="col-2 border-right my-auto">
@@ -74,5 +111,7 @@
 	<% }) %>
 	<div class="py-5"></div>
 </div>
+
+
 
 <%- include ("partials/footer") %>
