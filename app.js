@@ -8,7 +8,7 @@ const express = require('express'),
 	  flash = require('connect-flash'),
 	  mongoose = require('mongoose'),
 	  methodOverride = require('method-override'),
-	  morgan = require('morgan'),
+	  // morgan = require('morgan'),
 	  passport = require('passport'),
 	  LocalStrategy = require('passport-local').Strategy,
 	  expressSession = require('express-session');
@@ -38,7 +38,7 @@ const Recipe = require('./models/recipe'),
 // DEVELOPMENT
 // =====================
 // Morgan
-app.use(morgan('tiny'));
+// app.use(morgan('tiny'));
 
 // Seed the DB
 // const seed = require('./utils/seed');
@@ -62,6 +62,9 @@ try {
 // Express Config
 app.set("view engine", "ejs");
 app.use(express.static('public'));
+app.use(express.json({
+	type: ["application/json", "text/plain"]
+}))
 
 // Express Session Config
 app.use(expressSession({
