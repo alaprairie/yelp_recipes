@@ -91,9 +91,54 @@ router.post("/vote", isLoggedIn, async (req, res) => {
 	// 	voteType: "up" or "down"
 	// }
 	const recipe = await Recipe.findById(req.body.recipeId);
-	console.log(recipe);
+	const alreadyUpvoted = recipe.upvotes.indexOf(req.user.username) // will be -1 if not found
+	const alreadyDownvoted = recipe.downvotes.indexOf(req.user.username) // will be -1 if not found
 	
-	res.json(recipe);
+	let response = {}
+	// Voting logic
+	if (alreadyUpvoted === -1 && alreadyDownvoted === -1) { // has not voted
+		if (req.body.voteType === "up") { // Upvoting
+			recipe.upvotes.push(req.user.username);
+			recipe.save()
+			response.message = "Upvote tallied!"
+		} else if (req.body.voteType === "down") { // Downvoting
+			recipe.downvotes.push(req.user.username);
+			recipe.save()
+			response.message = "Downvote tallied!"
+		} else { // Error
+			response.message = "Error 1"
+		}
+	} else if (alreadyUpvoted >= 0) { // already upvoted
+		if (req.body.voteType === "up") {
+			recipe.upvotes.splice(alreadyUpvoted, 1);
+			recipe.save()
+			response.message = "Upvote removed";
+		} else if (req.body.voteType === "down") {
+			recipe.upvotes.splice(alreadyUpvoted, 1);
+			recipe.downvotes.push(req.user.username);
+			recipe.save()
+			response.message = "Changed to downvote"
+		} else { // Error
+			response.message = "Error 2"
+		}
+	} else if (alreadyDownvoted >= 0) { // already downvoted
+		if (req.body.voteType === "up") {
+			recipe.downvotes.splice(alreadyDownvoted, 1);
+			recipe.upvotes.push(req.user.username);
+			recipe.save()
+			response.message = "Changed to upvote"
+		} else if (req.body.voteType === "down") {
+			recipe.downvotes.splice(alreadyDownvoted, 1);
+			recipe.save()
+			response.message = "Downvote removed";
+		} else { // Error
+			response.message = "Error 3"
+		}
+	} else { // Error
+		response.message = "Error 4"
+	}
+	
+	res.json(response);
 })
 
 // Show
