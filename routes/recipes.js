@@ -30,7 +30,7 @@ router.post("/", isLoggedIn, async (req, res) => {
 		issue: req.body.issue,
 		genre,
 		color: !!req.body.color, //turns it into a boolean
-		image_link: req.body.image,
+		image_link: req.body.image_link,
 		owner: {
 			id: req.user._id,
 			username: req.user.username
@@ -174,7 +174,7 @@ router.put("/:id", checkRecipeOwner, async (req, res) => {
 		issue: req.body.issue,
 		genre,
 		color: !!req.body.color, //turns it into a boolean
-		image_link: req.body.image
+		image_link: req.body.image_link
 	}
 	
 	try {
