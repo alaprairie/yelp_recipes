@@ -1,73 +1,53 @@
 <%- include ("partials/header") %>
 
-<% const convertUnits = (ingredients, num) => { 
-	 const measurements = ["tbsp", "tablespoon", "tablespoons", "tsp", "teaspoon", "teaspoon", "oz", "ounce", "ounces", "pound", "pounds", "floz", "cup", "cups", "pint", "pints", "quart", "quarts", "gal", "gallon", "gallons", "lb", "lbs"]
-
-	 const words = ingredients.split(" ") 
-		 words.forEach((word, i) =>{
-			 if(measurements.includes(word.toLowerCase())) {
-				 words[i - 1] = parseFloat(words[i - 1]) * num 
-			 }
-			 const output = words.join(" ")
-		}
-	)
-	// documnent not defined
-	// const txt = document.getElementById('ingredients')
-	// txt.innerText = output
-} %>
-
-
-
-
-
-
 <div class="container">
 	<div class="row mt-4">
-		<div class="col-6 show_image-container">
-			<img src="<%= recipe.image_link %>">
-		</div>
-		<div class="col-6 show_details-container">
+		<div class="col-12 show_details-container">
 			<h1><%= recipe.title %></h1>
 			<p><%= recipe.description %></p>
-			<table class="table">
+		<div class="col-12 show_image-container">
+			<img src="<%= recipe.image_link %>">
+		</div>
+			<table class="table col-12">
 			  <tbody>
 				<tr>
 				  <th scope="row">Author</th>
 				  <td><%= recipe.author %></td>
 				</tr>
-				<tr>
-				  <th scope="row">Ingredients</th>
-				  <td id="ingredients"><%= recipe.ingredients %></td>
-				</tr>
-				<tr>
 				  <th scope="row">Date</th>
 				  <td><%= recipe.date %></td>
-				</tr>
-				<tr>
-				  <th scope="row">Series</th>
-				  <td><%= recipe.series %></td>
-				</tr>
-				<tr>
-				  <th scope="row">Issue #</th>
-				  <td><%= recipe.issue %></td>
 				</tr>
 				<tr>
 				  <th scope="row">Genre</th>
 				  <td><%= recipe.genre %></td>
 				</tr>
 				<tr>
-				  <th scope="row">Color?</th>
-				  <td><%= recipe.color %></td>
+				  <th scope="row">Instructions</th>
+				  <td><%= recipe.instructions %></td>
+				</tr>
+				<tr class="d-flex flex-row">
+					<th scope="row">Portion?</th>
+			  		<td><button id="change_units_metric" class="p-2 btn btn-dark">METRIC!</button></td>
+					<td><button id="change_units_goblin" class="p-2 btn btn-secondary">GOBLIN!</button></td>
+					<td><button id="change_units_imperial" class="p-2 btn btn-light">IMPERIAL!</button></td>
 				</tr>
 				<tr>
-				  <th scope="row">Portion?</th>
-					<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 2) %>">Convert units x2
-					  </a></td>
-					<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 3) %>">Convert units x3
-					  </a></td>
-			  		<td><a class="btn btn-md btn-info w-20 my-1" onclick="<%= convertUnits(recipe.ingredients, 5) %>">Convert units x5
-					  </a></td>
+					<table class="table table-bordered">
+						<tr>
+      						<th>Ingredient</th>
+      						<th>Amount</th>
+      						<th>Unit</th>
+    					</tr>
+						<% for(i=0; i<10; i++) { %>
+				  		<tr>
+							<td class="ingredients"><%= recipe.ingredients[i].name %></td>
+							<td class="ingredients"><%= recipe.ingredients[i].amount %></td>
+							<td class="ingredients"><%= recipe.ingredients[i].measurement %></td>
+						</tr>
+						<% } %>
+					</table>
 				</tr>
+				<tr>
 			  </tbody>
 			</table>
 			<% if (user && user.username === recipe.owner.username) { %>
@@ -86,15 +66,15 @@
 		</a>
 		<div>
 			<% if (user && recipe.upvotes.indexOf(user.username) >= 0) { %>
-				<button id="upvote_btn" class="btn btn-success btn-lg -mt-3">+</button>
+				<button id="upvote_btn" class="btn btn-success btn-lg mt-3">+</button>
 			<% } else if (user) { %>
-				<button id="upvote_btn" class="btn btn-outline-success btn-lg -mt-3">+</button>
+				<button id="upvote_btn" class="btn btn-outline-success btn-lg mt-3">+</button>
 			<% } %>
 			<span id="score" class="mx-2"><%= recipe.upvotes.length - recipe.downvotes.length %></span>
 			<% if (user && recipe.upvotes.indexOf(user.username) <= 0) { %>
-				<button id="downvote_btn" class="btn btn-danger btn-lg -mt-3">-</button>
+				<button id="downvote_btn" class="btn btn-danger btn-lg mt-3">-</button>
 			<% } else if (user) { %>
-				<button id="downvote_btn" class="btn btn-outline-danger btn-lg -mt-3">-</button>
+				<button id="downvote_btn" class="btn btn-outline-danger btn-lg mt-3">-</button>
 			<% } %>
 		</div>
 	</div>
@@ -123,5 +103,6 @@
 	var recipeId = "<%- recipe._id %>"
 </script>
 <script src="/js/recipes_show.js"></script>
+<script src="/js/recipe_conversions.js"></script>
 
 <%- include ("partials/footer") %>

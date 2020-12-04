@@ -1,15 +1,18 @@
 const mongoose = require("mongoose");
+mongoose.set('useFindAndModify', false);
 
 const recipeSchema = new mongoose.Schema({
 	title: String,
 	description: String,
 	author: String,
-	ingredients: String,
+	ingredients: [{
+		name: String,
+		amount: Number,
+		measurement: String
+	}],
 	date: Date,
-	series: String,
-	issue: Number,
+	instructions: String,
 	genre: String,
-	color: Boolean,
 	image_link: String,
 	owner: {
 		id: {

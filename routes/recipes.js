@@ -20,16 +20,25 @@ router.get("/", async (req, res) => { //index route
 // Create
 router.post("/", isLoggedIn, async (req, res) => {
 	const genre = req.body.genre.toLowerCase();
+	const raw_ing = req.body.ingredients;
+	const raw_ing_measurement = req.body.ingredients_measurement;
+	const raw_ing_amount = req.body.ingredients_amount;
+	const ingredients = [];
+	raw_ing.forEach((ing, i) => {
+		ingredients.push({
+			name: raw_ing[i],
+			amount: raw_ing_amount[i],
+			measurement: raw_ing_measurement[i]
+		})
+	})
 	const newRecipe = {
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
-		ingredients: req.body.ingredients,
+		ingredients: ingredients,
 		date: req.body.date,
-		series: req.body.series,
-		issue: req.body.issue,
+		instructions: req.body.instructions,
 		genre,
-		color: !!req.body.color, //turns it into a boolean
 		image_link: req.body.image_link,
 		owner: {
 			id: req.user._id,
@@ -38,6 +47,8 @@ router.post("/", isLoggedIn, async (req, res) => {
 		upvotes: [req.user.username],
 		downvotes: []
 	}
+	console.log(req.body);
+	console.log(newRecipe);
 	
 	try {
 		const recipe = await Recipe.create(newRecipe);
@@ -72,7 +83,7 @@ router.get("/search", async (req, res) => {
 // Genre
 router.get("/genre/:genre", async (req, res) => {
 	// Check if the given genre is valid
-	const validGenres = ["cajun", "slow-cooker", "goblin"];
+	const validGenres = ["cajun", "slow-cooker", "goblin", "chinese", "mexican", "italian", "japanese", "greek", "french", "swiss", "puerto-rican", "thai", "indian", "canadian", "other"];
 	if (validGenres.includes(req.params.genre.toLowerCase())) {
 		// If yes, continue
 		const recipes = await Recipe.find({genre: req.params.genre}).exec();
@@ -164,16 +175,25 @@ router.get("/:id/edit", checkRecipeOwner, async (req, res) => {
 // Update 
 router.put("/:id", checkRecipeOwner, async (req, res) => {
 	const genre = req.body.genre.toLowerCase();
+	const raw_ing = req.body.ingredients;
+	const raw_ing_measurement = req.body.ingredients_measurement;
+	const raw_ing_amount = req.body.ingredients_amount;
+	const ingredients = [];
+	raw_ing.forEach((ing, i) => {
+		ingredients.push({
+			name: raw_ing[i],
+			amount: raw_ing_amount[i],
+			measurement: raw_ing_measurement[i]
+		})
+	})
 	const recipeBody = {
 		title: req.body.title,
 		description: req.body.description,
 		author: req.body.author,
-		ingredients: req.body.ingredients,
+		ingredients: ingredients,
 		date: req.body.date,
-		series: req.body.series,
-		issue: req.body.issue,
+		instructions: req.body.instructions,
 		genre,
-		color: !!req.body.color, //turns it into a boolean
 		image_link: req.body.image_link
 	}
 	

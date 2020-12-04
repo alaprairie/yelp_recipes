@@ -15,34 +15,56 @@
 	    <input type="text" class="form-control" name="author" value="<%= recipe.author %>">
 	  </div>
 		<div class="form-group">
-	    <label for="publisher">Ingredients</label>
-	    <input type="text" class="form-control" name="ingredients" value="<%= recipe.ingredients %>">
+	    <label for="publisher">Ingredients (Please use decimals)</label>
+		<% for(i=0; i<10; i++) { %>
+			<div class="form-group">
+			<input type="text" name="ingredients" value="<%= recipe.ingredients[i].name %>">
+			<input type="number" step="any" name="ingredients_amount" value="<%= recipe.ingredients[i].amount %>">
+			<select name="ingredients_measurement" value="<%= recipe.ingredients[i].measurement %>">
+			<option disabled> -- Choose Below -- </option>
+				<option <%= recipe.ingredients[i].measurement === 'big spoonfulls' ? 'selected' : '' %>>big spoonfulls</option>
+				<option <%= recipe.ingredients[i].measurement === 'c' ? 'selected' : '' %>>c</option>
+				<option <%= recipe.ingredients[i].measurement === 'g' ? 'selected' : '' %>>g</option>
+				<option <%= recipe.ingredients[i].measurement === 'handfulls' ? 'selected' : '' %>>handfulls</option>
+				<option <%= recipe.ingredients[i].measurement === 'kg' ? 'selected' : '' %>>kg</option>
+				<option <%= recipe.ingredients[i].measurement === 'lb' ? 'selected' : '' %>>lb</option>
+				<option <%= recipe.ingredients[i].measurement === 'ml' ? 'selected' : '' %>>ml</option>
+				<option <%= recipe.ingredients[i].measurement === 'oz' ? 'selected' : '' %>>oz</option>
+				<option <%= recipe.ingredients[i].measurement === 'small spoonfulls' ? 'selected' : '' %>>small spoonfulls</option>
+				<option <%= recipe.ingredients[i].measurement === 'spoonfulls' ? 'selected' : '' %>>spoonfulls</option>
+				<option <%= recipe.ingredients[i].measurement === 'steins' ? 'selected' : '' %>>steins</option>
+				<option <%= recipe.ingredients[i].measurement === 'tbsp' ? 'selected' : '' %>>tbsp</option>
+				<option <%= recipe.ingredients[i].measurement === 'tsp' ? 'selected' : '' %>>tsp</option>
+				<option <%= recipe.ingredients[i].measurement === 'each' ? 'selected' : '' %>>each</option>
+				</select>
+			</div>
+		<% } %>
+		<div class="form-group">
+	    <label for="instructions">Instructions</label>
+		<textarea type="text" class="form-control" name="instructions" rows="5"><%= recipe.instructions %></textarea>
 	  </div>
 		<div class="form-group">
 	    <label for="date">Date</label>
 	    <input type="date" class="form-control" name="date" value="<%= recipe.date.toISOString().split('T')[0] %>">
-	  </div>
-		<div class="form-group">
-	    <label for="series">Series</label>
-	    <input type="text" class="form-control" name="series" value="<%= recipe.series %>">
-	  </div>
-		<div class="form-group">
-	    <label for="issue">Issue</label>
-	    <input type="number" class="form-control" name="issue" value="<%= recipe.issue %>">
-	  </div>
 		<div class="form-group">
 	    <label for="genre">Genre</label>
 	    <select class="form-control" id="genre" name="genre">
-			<option disabled selected> -- Choose Below -- </option>
+			<option disabled> -- Choose Below -- </option>
 			<option <%= recipe.genre === 'cajun' ? 'selected' : '' %>>Cajun</option>
-			<option <%= recipe.genre === 'slow-cooker' ? 'selected' : '' %>>Slow Cooker</option>
+			<option <%= recipe.genre === 'canadian' ? 'selected' : '' %>>Canadian</option>
+			<option <%= recipe.genre === 'chinese' ? 'selected' : '' %>>Chinese</option>
+			<option <%= recipe.genre === 'french' ? 'selected' : '' %>>French</option>
 			<option <%= recipe.genre === 'goblin' ? 'selected' : '' %>>Goblin</option>
+			<option <%= recipe.genre === 'greek' ? 'selected' : '' %>>Greek</option>
+			<option <%= recipe.genre === 'Indian' ? 'selected' : '' %>>Indian</option>
+			<option <%= recipe.genre === 'Japanese' ? 'selected' : '' %>>Japanese</option>
+			<option <%= recipe.genre === 'mexican' ? 'selected' : '' %>>Mexican</option>
+			<option <%= recipe.genre === 'puerto-rican' ? 'selected' : '' %>>Puerto Rican</option>
+			<option <%= recipe.genre === 'slow-cooker' ? 'selected' : '' %>>Slow Cooker</option>
+			<option <%= recipe.genre === 'Swiss' ? 'selected' : '' %>>Swiss</option>
+			<option <%= recipe.genre === 'Thai' ? 'selected' : '' %>>Thai</option>
+			<option <%= recipe.genre === 'Other' ? 'selected' : '' %>>Other</option>
 			</select>
-	  </div>
-		<div class="form-group form-check">
-	    <input type="checkbox" class="form-check-input" name="color" <%= recipe.color ? 'checked' : '' %>>
-			<label for="color">Color?</label>
-	  </div>
 	  <div class="form-group">
 	    <label for="image">Link to Image</label>
 	    <input type="text" class="form-control" name="image_link" value="<%= recipe.image_link %>">
